@@ -44,11 +44,11 @@
 		"stylelint": "^15.7.0"
 	},
 	"scripts": {
-		"lint": "eslint . --max-warnings=0 && prettier '**/*.js' --check",
+		"lint": "eslint . --max-warnings=0 && prettier \"**/*.js\" --check",
 		"test": "jest",
 		"watch": "jest --watch",
 		"coverage": "jest --coverage",
-		"fix": "eslint . --fix --max-warnings=0 && prettier '**/*.js' --write",
+		"fix": "eslint . --fix --max-warnings=0 && prettier \"**/*.js\" --write",
 		"prepare": "husky install"
 	},
 	"lint-staged": {
