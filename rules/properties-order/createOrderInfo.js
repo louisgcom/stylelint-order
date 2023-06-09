@@ -28,6 +28,7 @@ module.exports = function createOrderInfo(input) {
 				expectedPosition,
 				groupName: group.groupName,
 				noEmptyLineBeforeInsideGroup: group.noEmptyLineBetween,
+				noBreakLineBeforeInsideGroup: group.noBreakLineBetween,
 			};
 
 			return;

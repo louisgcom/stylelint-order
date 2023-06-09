@@ -61,5 +61,18 @@ module.exports = function validatePrimaryOption(actualOptions) {
 		return false;
 	}
 
+	// Every object-item's "noBreakLineBetween" must be a boolean
+	if (
+		!objectItems.every((item) => {
+			if (item.noBreakLineBetween === undefined) {
+				return true;
+			}
+
+			return isBoolean(item.noBreakLineBetween);
+		})
+	) {
+		return false;
+	}
+
 	return true;
 };

@@ -94,6 +94,31 @@ testConfig({
 
 testConfig({
 	ruleName,
+	description: 'noBreakLineBetween',
+	valid: true,
+	config: [
+		{
+			noBreakLineBetween: true,
+			properties: [],
+		},
+	],
+});
+
+testConfig({
+	ruleName,
+	description: 'invalid noBreakLineBetween',
+	valid: false,
+	config: [
+		{
+			noBreakLineBetween: 'true',
+			properties: [],
+		},
+	],
+	message: `Invalid option "[{"noBreakLineBetween":"true","properties":[]}]" for rule "${ruleName}"`,
+});
+
+testConfig({
+	ruleName,
 	description: 'invalid emptyLineBefore',
 	valid: false,
 	config: [

@@ -2,7 +2,9 @@ let stylelint = require('stylelint');
 const { isString } = require('../../utils/validateType');
 let addEmptyLineBefore = require('./addEmptyLineBefore');
 let hasEmptyLineBefore = require('./hasEmptyLineBefore');
+let hasBreakLineBefore = require('./hasBreakLineBefore');
 let removeEmptyLinesBefore = require('./removeEmptyLinesBefore');
+let removeBreakLinesBefore = require('./removeBreakLinesBefore');
 let ruleName = require('./ruleName');
 let messages = require('./messages');
 
@@ -99,6 +101,23 @@ module.exports = function checkEmptyLineBefore({
 			} else {
 				stylelint.utils.report({
 					message: messages.rejectedEmptyLineBefore(secondPropData.name),
+					node: secondPropData.node,
+					result,
+					ruleName,
+				});
+			}
+		}
+
+		if (
+			secondPropData.orderData.noEmptyLineBeforeInsideGroup &&
+			secondPropData.orderData.noBreakLineBeforeInsideGroup &&
+			hasBreakLineBefore(secondPropData.node)
+		) {
+			if (isFixEnabled) {
+				removeBreakLinesBefore(secondPropData.node, context.newline);
+			} else {
+				stylelint.utils.report({
+					message: messages.rejectedBreakLineBefore(secondPropData.name),
 					node: secondPropData.node,
 					result,
 					ruleName,

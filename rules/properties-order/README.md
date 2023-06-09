@@ -31,6 +31,7 @@ type Group = {
 	properties: Array<string>;
 	emptyLineBefore?: 'always' | 'never' | 'threshold';
 	noEmptyLineBetween?: boolean;
+	noBreakLineBetween?: boolean;
 	groupName?: string;
 	order?: 'flexible';
 };
@@ -53,6 +54,7 @@ Array of unprefixed property names or group objects. Within an order array, you 
 
 
 	* `noEmptyLineBetween`: If `true`, properties within group should not have empty lines between them.
+	* `noBreakLineBetween`: If `true` and if `noEmptyLineBetween` is `true`, properties within group should not have break lines between them.
 	* `groupName`: An optional name for the group. This will be used in error messages.
 	* `order: "flexible"`: If property isn't set (the default), the properties in this group must come in the order specified. If `"flexible"`, the properties can be in any order as long as they are grouped correctly.
 
@@ -432,6 +434,55 @@ a {
 
 	font-size: 2px;
 	font-weight: bold;
+}
+```
+
+Given:
+
+```json
+{
+	"order/properties-order": [
+		{
+			"emptyLineBefore": "always",
+			"noEmptyLineBetween": true,
+			"noBreakLineBetween": true,
+			"properties": [
+				"height",
+				"width"
+			]
+		},
+		{
+			"emptyLineBefore": "always",
+			"noEmptyLineBetween": true,
+			"noBreakLineBetween": true,
+			"properties": [
+				"font-size",
+				"font-weight"
+			]
+		}
+	]
+}
+```
+
+The following pattern is considered warnings:
+
+```css
+a {
+	height: 1px;
+	width: 2px;
+
+	font-size: 2px;
+	font-weight: bold;
+}
+```
+
+The following patterns is *not* considered warnings:
+
+```css
+a {
+	height: 1px;width: 2px;
+
+	font-size: 2px;font-weight: bold;
 }
 ```
 
