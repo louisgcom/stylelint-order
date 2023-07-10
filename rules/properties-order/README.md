@@ -29,7 +29,7 @@ type PrimaryOption = Array<string | Group>;
 
 type Group = {
 	properties: Array<string>;
-	emptyLineBefore?: 'always' | 'never' | 'threshold';
+	emptyLineBefore?: 'always' | 'never' | 'breakline' | 'threshold';
 	noEmptyLineBetween?: boolean;
 	noBreakLineBetween?: boolean;
 	groupName?: string;
@@ -42,7 +42,7 @@ Array of unprefixed property names or group objects. Within an order array, you 
 * unprefixed property names
 * group objects with these properties:
 	* `properties` (array of strings): The properties in this group.
-	* `emptyLineBefore: "always" | "never" | "threshold"`: If `always`, this group must be separated from other properties by an empty newline. If emptyLineBefore is `never`, the group must have no empty lines separating it from other properties. By default this property isn't set.
+	* `emptyLineBefore: "always" | "never" | "breakline" | "threshold"`: If `always`, this group must be separated from other properties by an empty newline. If emptyLineBefore is `never`, the group must have no empty lines separating it from other properties. If emptyLineBefore is `breakline`, the group must have a breakline separating it from other properties. By default this property isn't set.
 
 		Rule will check empty lines between properties _only_. However, shared-line comments ignored by rule. Shared-line comment is a comment on the same line as declaration before this comment.
 
@@ -559,7 +559,7 @@ a {
 ```ts
 type SecondaryOptions = {
 	unspecified?: "top" | "bottom" | "bottomAlphabetical" | "ignore";
-	emptyLineBeforeUnspecified?: "always" | "never" | "threshold";
+	emptyLineBeforeUnspecified?: "always" | "never" | "breakline" | "threshold";
 	emptyLineMinimumPropertyThreshold?: number;
 };
 ```
@@ -731,12 +731,13 @@ a {
 
 ### `emptyLineBeforeUnspecified`
 
-Value type: `"always" | "never" | "threshold"`.<br>
+Value type: `"always" | "never" | "breakline" | "threshold"`.<br>
 Default value: none.
 
 Default behavior does not enforce the presence of an empty line before an unspecified block of properties (`"ignore"`).
 
 If `"always"`, the unspecified group must be separated from other properties by an empty newline.
+If `"breakline"`, the unspecified group must be separated from other properties by a breakline.
 If `"never"`, the unspecified group must have no empty lines separating it from other properties.
 
 For `"threshold"`, see the [`emptyLineMinimumPropertyThreshold` documentation](#emptyLineMinimumPropertyThreshold) for more information.

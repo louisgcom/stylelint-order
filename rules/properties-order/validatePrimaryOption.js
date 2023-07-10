@@ -42,7 +42,7 @@ module.exports = function validatePrimaryOption(actualOptions) {
 				return true;
 			}
 
-			return ['always', 'never', 'threshold'].includes(item.emptyLineBefore);
+			return ['always', 'never', 'breakline', 'threshold'].includes(item.emptyLineBefore);
 		})
 	) {
 		return false;

@@ -22,7 +22,7 @@ function rule(primaryOption, options = {}, context = {}) {
 				actual: options,
 				possible: {
 					unspecified: ['top', 'bottom', 'ignore', 'bottomAlphabetical'],
-					emptyLineBeforeUnspecified: ['always', 'never', 'threshold'],
+					emptyLineBeforeUnspecified: ['always', 'never', 'breakline', 'threshold'],
 					emptyLineMinimumPropertyThreshold: isNumber,
 				},
 				optional: true,

@@ -1,5 +1,6 @@
 let stylelint = require('stylelint');
 const { isString } = require('../../utils/validateType');
+let addBreakLineBefore = require('./addBreakLineBefore');
 let addEmptyLineBefore = require('./addEmptyLineBefore');
 let hasEmptyLineBefore = require('./hasEmptyLineBefore');
 let hasBreakLineBefore = require('./hasBreakLineBefore');
@@ -56,6 +57,31 @@ module.exports = function checkEmptyLineBefore({
 			emptyLineBefore === 'threshold' && belowEmptyLineThreshold;
 
 		if (
+			emptyLineBefore === 'breakline' &&
+			(!hasBreakLineBefore(secondPropData.node) || hasEmptyLineBefore(secondPropData.node))
+		) {
+			if (isFixEnabled) {
+				if (!hasBreakLineBefore(secondPropData.node)) {
+					addBreakLineBefore(secondPropData.node, context.newline);
+				} else {
+					removeEmptyLinesBefore(secondPropData.node, context.newline);
+				}
+			} else if (!hasBreakLineBefore(secondPropData.node)) {
+				stylelint.utils.report({
+					message: messages.expectedBreakLineBefore(secondPropData.name),
+					node: secondPropData.node,
+					result,
+					ruleName,
+				});
+			} else {
+				stylelint.utils.report({
+					message: messages.expectedBreakLineBefore(secondPropData.name),
+					node: secondPropData.node,
+					result,
+					ruleName,
+				});
+			}
+		} else if (
 			(emptyLineBefore === 'always' || emptyLineThresholdInsertLines) &&
 			!hasEmptyLineBefore(secondPropData.node)
 		) {
