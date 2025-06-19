@@ -1,4 +1,4 @@
-const rule = require('..');
+import { rule } from '../index.js';
 
 const { ruleName, messages } = rule;
 
@@ -68,6 +68,24 @@ testRule({
 		{
 			code: 'a { font-size: 1px; -moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialised; font-weight: bold; }',
 		},
+		{
+			code: 'a { color: #000; span { bottom: 1em; top: 1em; } width: 25%;}',
+		},
+		{
+			code: 'a { display: block; margin: 0 auto 5px 0; Margin: 0 auto 5px 0; width: auto; }',
+		},
+		{
+			code: 'a { display: block; Margin: 0 auto 5px 0; margin: 0 auto 5px 0; width: auto; }',
+		},
+		{
+			code: 'a { align: center; Border-width: 1px; Border-top-width: 2px; color: red; }',
+		},
+		{
+			code: 'a { align: center; border-width: 1px; Border-top-width: 2px; color: red; }',
+		},
+		{
+			code: 'a { align: center; Border-width: 1px; border-top-width: 2px; color: red; }',
+		},
 	],
 
 	reject: [
@@ -130,6 +148,35 @@ testRule({
 			code: '@media print { top: 0; color: red; }',
 			fixed: '@media print { color: red; top: 0; }',
 			message: messages.expected('color', 'top'),
+		},
+		{
+			description: 'Fix should apply, when disable comments were used',
+			code: `
+				/* stylelint-disable order/properties-alphabetical-order */
+				/* stylelint-enable order/properties-alphabetical-order */
+				a { top: 0; color: pink; }
+			`,
+			fixed: `
+				/* stylelint-disable order/properties-alphabetical-order */
+				/* stylelint-enable order/properties-alphabetical-order */
+				a { color: pink; top: 0; }
+			`,
+			message: messages.expected('color', 'top'),
+		},
+		{
+			code: 'a { align: center; Border-top-width: 2px; Border-width: 1px; color: red; }',
+			fixed: 'a { align: center; Border-width: 1px; Border-top-width: 2px; color: red; }',
+			message: messages.expected('Border-width', 'Border-top-width'),
+		},
+		{
+			code: 'a { align: center; Border-top-width: 2px; border-width: 1px; color: red; }',
+			fixed: 'a { align: center; border-width: 1px; Border-top-width: 2px; color: red; }',
+			message: messages.expected('border-width', 'Border-top-width'),
+		},
+		{
+			code: 'a { align: center; border-top-width: 2px; Border-width: 1px; color: red; }',
+			fixed: 'a { align: center; Border-width: 1px; border-top-width: 2px; color: red; }',
+			message: messages.expected('Border-width', 'border-top-width'),
 		},
 	],
 });
@@ -205,8 +252,6 @@ testRule({
 			message: messages.expected('color', 'top'),
 		},
 		{
-			// blocked by https://github.com/hudochenkov/stylelint-order/issues/115
-			skip: true,
 			code: `
 				const Component = styled.div\`
 					top: 0;
@@ -218,8 +263,6 @@ testRule({
 			message: messages.expected('color', 'top'),
 		},
 		{
-			// blocked by https://github.com/hudochenkov/stylelint-order/issues/115
-			skip: true,
 			code: `
 				const Component = styled.div\`
 					top: 0;
@@ -236,8 +279,6 @@ testRule({
 			message: messages.expected('color', 'top'),
 		},
 		{
-			// blocked by https://github.com/hudochenkov/stylelint-order/issues/115
-			skip: true,
 			code: `
 				const Component = styled.div\`
 					color: tomato;

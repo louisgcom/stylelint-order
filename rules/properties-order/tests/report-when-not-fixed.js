@@ -1,5 +1,7 @@
-const stylelint = require('stylelint');
-const { ruleName } = require('..');
+import stylelint from 'stylelint';
+import { rule } from '../index.js';
+
+const { ruleName } = rule;
 
 test(`show warning if --fix enabled, but it didn't fix`, () => {
 	const code = `
@@ -33,7 +35,7 @@ test(`show warning if --fix enabled, but it didn't fix`, () => {
 	});
 });
 
-test(`show warning if --fix enabled, and it fixed`, () => {
+test(`don't show warning if --fix enabled, and it fixed`, () => {
 	const code = `
 		const Component = styled.div\`
 			color: tomato;

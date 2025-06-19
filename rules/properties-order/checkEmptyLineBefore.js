@@ -1,15 +1,12 @@
-let stylelint = require('stylelint');
-const { isString } = require('../../utils/validateType');
-let addBreakLineBefore = require('./addBreakLineBefore');
-let addEmptyLineBefore = require('./addEmptyLineBefore');
-let hasEmptyLineBefore = require('./hasEmptyLineBefore');
-let hasBreakLineBefore = require('./hasBreakLineBefore');
-let removeEmptyLinesBefore = require('./removeEmptyLinesBefore');
-let removeBreakLinesBefore = require('./removeBreakLinesBefore');
-let ruleName = require('./ruleName');
-let messages = require('./messages');
+import stylelint from 'stylelint';
+import { isString } from '../../utils/validateType.js';
+import { addEmptyLineBefore } from './addEmptyLineBefore.js';
+import { hasEmptyLineBefore } from './hasEmptyLineBefore.js';
+import { removeEmptyLinesBefore } from './removeEmptyLinesBefore.js';
+import { ruleName } from './ruleName.js';
+import { messages } from './messages.js';
 
-module.exports = function checkEmptyLineBefore({
+export function checkEmptyLineBefore({
 	firstPropData,
 	secondPropData,
 	propsCount,
@@ -17,7 +14,6 @@ module.exports = function checkEmptyLineBefore({
 	context,
 	emptyLineBeforeUnspecified,
 	emptyLineMinimumPropertyThreshold,
-	isFixEnabled,
 	primaryOption,
 	result,
 }) {
@@ -31,9 +27,6 @@ module.exports = function checkEmptyLineBefore({
 	let secondPropGroup = secondPropIsSpecified
 		? secondPropData.orderData.separatedGroup
 		: lastKnownSeparatedGroup;
-
-	// eslint-disable-next-line no-param-reassign
-	lastKnownSeparatedGroup = secondPropGroup;
 
 	let startOfSpecifiedGroup = secondPropIsSpecified && firstPropGroup !== secondPropGroup;
 	let startOfUnspecifiedGroup = firstPropIsSpecified && !secondPropIsSpecified;
@@ -99,16 +92,15 @@ module.exports = function checkEmptyLineBefore({
 			(emptyLineBefore === 'never' || emptyLineThresholdRemoveLines) &&
 			hasEmptyLineBefore(secondPropData.node)
 		) {
-			if (isFixEnabled) {
-				removeEmptyLinesBefore(secondPropData.node, context.newline);
-			} else {
-				stylelint.utils.report({
-					message: messages.rejectedEmptyLineBefore(secondPropData.name),
-					node: secondPropData.node,
-					result,
-					ruleName,
-				});
-			}
+			stylelint.utils.report({
+				message: messages.rejectedEmptyLineBefore(secondPropData.name),
+				node: secondPropData.node,
+				result,
+				ruleName,
+				fix: () => {
+					removeEmptyLinesBefore(secondPropData.node, context.newline);
+				},
+			});
 		}
 	}
 
@@ -122,33 +114,15 @@ module.exports = function checkEmptyLineBefore({
 			secondPropData.orderData.noEmptyLineBeforeInsideGroup &&
 			hasEmptyLineBefore(secondPropData.node)
 		) {
-			if (isFixEnabled) {
-				removeEmptyLinesBefore(secondPropData.node, context.newline);
-			} else {
-				stylelint.utils.report({
-					message: messages.rejectedEmptyLineBefore(secondPropData.name),
-					node: secondPropData.node,
-					result,
-					ruleName,
-				});
-			}
-		}
-
-		if (
-			secondPropData.orderData.noEmptyLineBeforeInsideGroup &&
-			secondPropData.orderData.noBreakLineBeforeInsideGroup &&
-			hasBreakLineBefore(secondPropData.node)
-		) {
-			if (isFixEnabled) {
-				removeBreakLinesBefore(secondPropData.node, context.newline);
-			} else {
-				stylelint.utils.report({
-					message: messages.rejectedBreakLineBefore(secondPropData.name),
-					node: secondPropData.node,
-					result,
-					ruleName,
-				});
-			}
+			stylelint.utils.report({
+				message: messages.rejectedEmptyLineBefore(secondPropData.name),
+				node: secondPropData.node,
+				result,
+				ruleName,
+				fix: () => {
+					removeEmptyLinesBefore(secondPropData.node, context.newline);
+				},
+			});
 		}
 	}
-};
+}

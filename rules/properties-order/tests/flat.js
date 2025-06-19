@@ -1,4 +1,4 @@
-const rule = require('..');
+import { rule } from '../index.js';
 
 const { ruleName, messages } = rule;
 
@@ -48,12 +48,28 @@ testRule({
 		{
 			code: 'a { top: 0; color: pink; display: none; width: 0; height: 0; }',
 		},
+		{
+			code: 'a { top: 0; Top: 0; color: pink; }',
+		},
+		{
+			code: 'a { Top: 0; top: 0; color: pink; }',
+		},
 	],
 
 	reject: [
 		{
-			code: 'a { color: pink; top: 0;  }',
-			fixed: 'a { top: 0; color: pink;  }',
+			code: 'a { color: pink; top: 0; }',
+			fixed: 'a { top: 0; color: pink; }',
+			message: messages.expected('top', 'color'),
+		},
+		{
+			code: 'a { Color: pink; top: 0; }',
+			fixed: 'a { top: 0; Color: pink; }',
+			message: messages.expected('top', 'Color'),
+		},
+		{
+			code: 'a { Top: 0; color: pink; top: 0; }',
+			fixed: 'a { Top: 0; top: 0; color: pink; }',
 			message: messages.expected('top', 'color'),
 		},
 		{
@@ -532,6 +548,37 @@ testRule({
 				</html>
 			`,
 			message: messages.expected('top', 'color'),
+		},
+	],
+});
+
+testRule({
+	ruleName,
+	config: [['width', 'height']],
+	fix: true,
+
+	reject: [
+		{
+			description: 'Fix should apply, when disable comments were used',
+			code: `
+				/* stylelint-disable order/properties-order */
+				/* stylelint-enable order/properties-order */
+
+				a {
+					height: 0;
+					width: 0;
+				}
+			`,
+			fixed: `
+				/* stylelint-disable order/properties-order */
+				/* stylelint-enable order/properties-order */
+
+				a {
+					width: 0;
+					height: 0;
+				}
+			`,
+			message: messages.expected('width', 'height'),
 		},
 	],
 });
