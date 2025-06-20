@@ -1,5 +1,5 @@
-const addBreakLineBefore = require('../addBreakLineBefore');
-const postcss = require('postcss');
+import { addBreakLineBefore } from '../addBreakLineBefore.js';
+import postcss from 'postcss';
 
 function addBreakLine(css, lineEnding) {
 	const root = postcss.parse(css);

@@ -1,4 +1,4 @@
-module.exports = function hasBreakLineBefore(decl) {
+export function hasBreakLineBefore(decl) {
 	if (/\r?\n\s*/.test(decl.raw('before'))) {
 		return true;
 	}
@@ -18,4 +18,4 @@ module.exports = function hasBreakLineBefore(decl) {
 	}
 
 	return false;
-};
+}
