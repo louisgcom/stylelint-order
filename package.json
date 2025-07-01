@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"eslint": "^9.24.0",
-		"eslint-config-hudochenkov": "^11.0.0",
+		"eslint-config-hudochenkov": "^12.0.0",
 		"eslint-config-prettier": "^10.1.2",
 		"globals": "^16.0.0",
 		"husky": "^9.1.7",
